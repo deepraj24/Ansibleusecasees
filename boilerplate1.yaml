@@ -1,0 +1,77 @@
+--- 
+  - name: Playbook for Server Configuration
+    hosts: node01
+    become: true
+    vars:
+      username: deploy
+
+    tasks:
+      - name: Change password for user account
+        user:
+          name: ubuntu
+          password: "{{ new_password | password_hash( 'new123') }}"
+        when: new_password is defined
+
+      - name: Create and configure deploy user account
+        user:
+          name: deploy
+          comment: "Deploy User Account"
+          state: present
+          shell: /bin/bash
+          password: "{{ deploy_password | password_hash( 'new123') }}"
+          createhome: yes
+        when: deploy_password is defined 
+
+      - name: Configure Public Key Authentication for the deploy Account
+        lineinfile:
+          path: '/home/ubuntu/.ssh/authorized_keys'
+          line: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC69TPJBGaPf6MhZA8TXJ2KnUJBvfBc7Y/K+cNvFuTeJaVqjgcINGkqKQwBqNEYet+MDHhFn1VN6vYm4NAC42+AorVVwgiMJ6frg9rpzPRpKrKWUICjeQTqMLEritR2trg4BKVk++9/5qH3l/81tuDx9XZ11M0qHwos1+zFR57S5Eub2EnFXwJazav9A+Zf4bsudopmswXWVNn4rMtM88K3Ltgna+TuByoEMlTzaf4N3O3kDH98vbes6BNKL3GyJcH4ZbEp0T7ySGDycXfwnAPgYgiSjkBV5rF+2t9L7+jJ8B28r0Ov2HXZiyesvXNOwyZJAi5RvXYAhC5vbfuOMSp0kTycUucPbBN2FlGxUtM2Ota3I8K3QObKTf6rBWN98jdliE+aC0vfzfPhprov0kXjDuunPgvY+Z2XAeYQogOjfhCYWW0kQJCcnwc3lnQgTmZBWxT9BM/4H19bF2wKnx4sscSD2UNr7HH5/cZuBPW7XiNkCEJvfYpC8c4k7xKA+vM= deploy@ip-172-31-16-224"
+
+      - name: Add deploy user to sudoers
+        lineinfile:
+          dest: /etc/sudoers
+          line: 'deploy ALL=(ALL) NOPASSWD: ALL'
+          validate: 'visudo -cf %s'
+
+
+      - name: Update and upgrade system
+        apt:
+          upgrade: dist 
+          force_apt_get: yes  
+
+      - name: We are allowing port 22   
+        ufw:
+          rule: allow
+          port: 22
+          proto: tcp
+
+      - name: Configure postfix to relay daily summary email
+        debconf:
+          name: postfix
+          question: postfix/mailname
+          value: your_email@example.com
+          vtype: string
+     
+      - name: We are insatlling postfix services   
+        apt:
+          name: postfix
+          state: latest
+
+      - name: Customize the ssh_port variable 
+        lineinfile:
+          path: /etc/ssh/sshd_config 
+          regexp: '^#?Port '
+          line: 'Port 22' 
+          backup: yes
+
+      - name: Disable ssh for root account
+        lineinfile:
+          path: /etc/ssh/sshd_config
+          regexp: '^#?PermitRootLogin ' 
+          line: 'PermitRootLogin no'
+          backup: yes
+    
+      - name: We are restaring sshd service.
+        service:
+          name: sshd
+          state: restarted

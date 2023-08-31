@@ -1,0 +1,10 @@
+---
+  - name: Install ansisttrano.rollback role
+    hosts: all
+    gather_facts: false
+    
+    tasks:
+      - name: Install the role using ansible-galaxy 
+        command: ansible-galaxy role install  -r requirements.yaml -p /home/ubuntu/vprofile/exercise1/roles
+
+

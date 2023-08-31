@@ -1,0 +1,28 @@
+---
+  - name: Setup Ansible Playbooks Repository
+    hosts: node01
+    gather_facts: false
+    become: true
+    tasks:
+    - name: Ensure Git is installed
+      package:
+        name: git
+        state: present
+
+    - name: Copy Ansible Playbooks
+      copy:
+        src: "/home/ubuntu/vprofile/playbooks"
+        dest: "/home/ubuntu/vprofile/repo/playbooks"
+      register: copy_result
+
+    - name: Commit Playbook Change
+      command: git commit -am "Updated playbooks"
+      args:
+        chdir: "/path/to/local/repo"
+      when: copy_result.changed
+
+    - name: Push Changes to Remote
+      command: git push origin master
+      args:
+        chdir: "/path/to/local/repo"
+      when: copy_result.changed

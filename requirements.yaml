@@ -1,0 +1,3 @@
+#requirements.yaml
+- src: ansistrano.deploy
+  version: 2.7.0

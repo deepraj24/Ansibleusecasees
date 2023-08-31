@@ -1,0 +1,6 @@
+---
+  - name: Deploy application
+    hosts: node01
+    roles:
+      - ansistrano.deploy
+

@@ -1,0 +1,17 @@
+#rollback.yaml
+---
+  - name: Rollback Playbook
+    hosts: node01
+    become: true
+    vars:
+      rollback_version: 1.0.0""
+    vars_files:
+      name: rollback_vars.yaml
+    roles:
+      name: ansistrano.rollback
+
+    tasks:
+      - name: Rollback application files
+        shell:
+          mv  /home/ubuntu/vprofile/exercise1/backup/rollback_version /home/ubuntu/vprofile/exercise1/deployment_directory
+        when: rollback_version is defined

@@ -1,0 +1,6 @@
+all:
+  hosts:
+   node01:
+     ansible_host: 172.31.5.122
+     ansible_user: ubuntu
+     ansible_ssh_private_key_file: ansiblekey.pem

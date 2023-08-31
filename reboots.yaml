@@ -1,0 +1,23 @@
+---
+ - name: Weekly System Reboot and Upgrade
+   hosts: node01
+   become: true
+   tasks:
+    - name : Update the system using yum
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+      when: ansible_date_time.weekday == 'Saturday'
+
+    - name: Reboot the system
+      reboot:
+         reboot_timeout: 300
+         pre_reboot_delay: 30
+      when: ansible_date_time.weekday == 'Saturday'
+
+    - name: Wait for the reboot and reconnect
+      wait_for:
+         port: 22
+         timeout: 300
+      when: ansible_date_time.weekday == 'Saturday'
