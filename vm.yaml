@@ -1,0 +1,14 @@
+---
+- name: Ansible Play 
+  hosts: localhost
+  
+  tasks: 
+    - name: launching AWS instance using Ansible 
+  
+      ec2: 
+        key_name: ansiblekey
+        region: us-east-2 
+        instance_type: t2.micro 
+        image: ami-024e6efaf93d85776
+        instance_tags: 
+          Name: Demo_server

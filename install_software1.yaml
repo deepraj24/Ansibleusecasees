@@ -1,0 +1,38 @@
+---
+
+- name: Install OpenJDK
+
+  hosts: node01
+
+  become: yes
+
+ 
+
+  tasks:
+
+    - name: Update apt cache
+
+      apt:
+
+        update_cache: yes
+
+ 
+
+    - name: Install OpenJDK
+
+      apt:
+
+        name: openjdk-11-jdk  # You can change the version as needed
+
+        state: present
+
+
+    - name: Install Maven 3
+      apt:
+        name: maven
+        state: present
+
+    - name: Install npm
+      apt:
+        name: npm
+        state: present

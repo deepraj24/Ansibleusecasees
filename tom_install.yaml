@@ -1,0 +1,83 @@
+---
+
+- name: Install Tomcat 8
+
+  hosts: localhost
+
+  gather_facts: yes
+
+  become: yes
+
+ 
+
+  tasks:
+
+    - name: Determine OS Distribution
+
+      ansible.builtin.command: "cat /etc/os-release"
+
+      register: os_info
+
+ 
+
+    - name: Install Tomcat on Debian/Ubuntu
+
+      ansible.builtin.apt:
+
+        name: tomcat8
+
+        state: present
+
+      when: "'ubuntu' in os_info.stdout or 'debian' in os_info.stdout"
+
+ 
+
+    - name: Install Tomcat on CentOS
+
+      ansible.builtin.yum:
+
+        name: tomcat8
+
+        state: present
+
+      when: "'centos' in os_info.stdout"
+
+ 
+
+    - name: Install Tomcat on Red Hat
+
+      ansible.builtin.yum:
+
+        name: tomcat8
+
+        state: present
+
+      when: "'redhat' in os_info.stdout"
+
+ 
+
+    - name: Install Tomcat on Fedora
+
+      ansible.builtin.dnf:
+
+        name: tomcat8
+
+        state: present
+
+      when: "'fedora' in os_info.stdout"
+
+ 
+
+    # Add more OS-specific tasks as needed for other OS types
+
+ 
+      
+      #- name: Start and Enable Tomcat Service
+
+      #ansible.builtin.service:
+
+      # name: tomcat8
+
+      # state: started
+
+      # enabled: yes
