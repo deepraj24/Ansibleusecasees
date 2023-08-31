@@ -1,4 +1,5 @@
-# Ansibleusecasees
+![image](https://github.com/deepraj24/Ansibleusecasees/assets/87631681/34264e03-2ff4-4651-b599-8b153fa6d06d)# Ansibleusec
+Activities
 run preboot tasks, use "yum" for upgrades
 use "command" module to "reboot" server
 run "wait_for" module to wait for 300 seconds for port 22 to become available before resuming the playbook. the port number can be changed if its not open-ssh
@@ -23,5 +24,7 @@ publish, test and tag the tole to Git
 specify roles and install it in the roles directory
 All roles that are ready to go to production should be tagged with a version. All playbooks that are ready for production should specify which versions of each role to use
 tags and changes to identify version of the playbook to use, store version of playbook with environment
-![image](https://github.com/deepraj24/Ansibleusecasees/assets/87631681/dde157d3-1cca-448c-a7d0-d809af0a8fd0)
+
+
+
 
