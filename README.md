@@ -1,4 +1,4 @@
-![image](https://github.com/deepraj24/Ansibleusecasees/assets/87631681/34264e03-2ff4-4651-b599-8b153fa6d06d)# Ansibleusec
+# Ansibleusec
 Activities
 run preboot tasks, use "yum" for upgrades
 use "command" module to "reboot" server
